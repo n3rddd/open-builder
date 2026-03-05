@@ -3,7 +3,7 @@ import type { WebSearchSettings } from "../store/settings";
 
 // ═══════════════════════════════ 工具定义 ═══════════════════════════════════
 
-export const TAVILY_TOOLS: ToolDefinition[] = [
+export const SEARCH_TOOLS: ToolDefinition[] = [
   {
     type: "function",
     function: {
@@ -50,7 +50,7 @@ export const TAVILY_TOOLS: ToolDefinition[] = [
   },
 ];
 
-// ═══════════════════════════════ API 调用 ═══════════════════════════════════
+// ═══════════════════════════════ Tavily API ═══════════════════════════════════
 
 async function tavilySearch(
   settings: WebSearchSettings,
@@ -133,20 +133,108 @@ async function jinaFallback(urls: string[]): Promise<string> {
   return JSON.stringify({ ok: pages.some((p) => p.ok), pages });
 }
 
+// ═══════════════════════════════ Firecrawl API ═══════════════════════════════════
+
+async function firecrawlSearch(
+  settings: WebSearchSettings,
+  query: string,
+  maxResults: number = 5,
+): Promise<string> {
+  const baseUrl = settings.firecrawlApiUrl || "https://api.firecrawl.dev";
+  const res = await fetch(`${baseUrl}/v2/search`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${settings.firecrawlApiKey}`,
+    },
+    body: JSON.stringify({
+      query,
+      limit: maxResults,
+      scrapeOptions: { formats: ["markdown"] },
+    }),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    return JSON.stringify({
+      ok: false,
+      error: `Firecrawl search failed (${res.status}): ${text}`
+    });
+  }
+
+  const data = await res.json();
+  return JSON.stringify({
+    ok: true,
+    answer: null,
+    results: (data.data ?? []).map((r: any) => ({
+      title: r.title || r.url,
+      url: r.url,
+      content: r.markdown || r.content || "",
+    })),
+  });
+}
+
+async function firecrawlScrape(
+  settings: WebSearchSettings,
+  urls: string[],
+): Promise<string> {
+  const baseUrl = settings.firecrawlApiUrl || "https://api.firecrawl.dev";
+  const res = await fetch(`${baseUrl}/v2/batch/scrape`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${settings.firecrawlApiKey}`,
+    },
+    body: JSON.stringify({
+      urls,
+      formats: ["markdown"],
+    }),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    return JSON.stringify({
+      ok: false,
+      pages: urls.map(url => ({
+        url,
+        ok: false,
+        error: `Firecrawl failed (${res.status}): ${text}`
+      })),
+    });
+  }
+
+  const data = await res.json();
+  return JSON.stringify({
+    ok: true,
+    pages: (data.data ?? []).map((r: any) => ({
+      url: r.metadata?.sourceURL || r.url,
+      ok: r.success ?? true,
+      content: r.markdown || r.content,
+    })),
+  });
+}
+
 // ═══════════════════════════════ 工具处理器 ═══════════════════════════════════
 
-export function createTavilyToolHandler(
+export function createSearchToolHandler(
   settings: WebSearchSettings,
 ): (name: string, args: unknown) => Promise<string> {
   return async (name: string, args: unknown): Promise<string> => {
     const a = args as Record<string, any>;
-    switch (name) {
-      case "web_search":
-        return tavilySearch(settings, a.query, a.max_results);
-      case "web_reader":
-        return tavilyExtract(settings, a.urls);
-      default:
-        return `Error: unknown tool "${name}"`;
+    const engine = settings.engine;
+
+    if (engine === "tavily") {
+      switch (name) {
+        case "web_search": return tavilySearch(settings, a.query, a.max_results);
+        case "web_reader": return tavilyExtract(settings, a.urls);
+      }
+    } else if (engine === "firecrawl") {
+      switch (name) {
+        case "web_search": return firecrawlSearch(settings, a.query, a.max_results);
+        case "web_reader": return firecrawlScrape(settings, a.urls);
+      }
     }
+
+    return `Error: unknown tool "${name}" or engine "${engine}"`;
   };
 }

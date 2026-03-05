@@ -10,7 +10,6 @@ import {
 import type { SandpackPredefinedTemplate } from "@codesandbox/sandpack-react";
 import { Terminal } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks/useTheme";
 import { useT } from "../i18n";
 import { SandpackListener } from "./code-viewer/SandpackListener";

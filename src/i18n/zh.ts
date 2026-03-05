@@ -20,9 +20,15 @@ export const zh = {
       hint: "AI 模型的名称，如 gpt-5.3-codex、deepseek-chat 等",
       selectPlaceholder: "选择模型",
     },
-    webSearch: { desc: "配置后，AI 将能够搜索网页和读取网页内容" },
+    webSearch: {
+      desc: "配置后，AI 将能够搜索网页和读取网页内容",
+      engine: "搜索引擎",
+      disabled: "停用",
+    },
     tavilyKey: { hint: "可选。配置后启用联网搜索和网页读取功能" },
     tavilyUrl: { hint: "可选。默认使用 Tavily 官方 API 地址" },
+    firecrawlKey: { hint: "可选。配置后启用联网搜索和网页读取功能" },
+    firecrawlUrl: { hint: "可选。默认使用 Firecrawl 官方 API 地址" },
     language: {
       label: "语言",
       system: "跟随系统",

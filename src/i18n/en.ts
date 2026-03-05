@@ -24,12 +24,20 @@ export const en: typeof zh = {
     },
     webSearch: {
       desc: "After configuration, AI will be able to search and read web pages",
+      engine: "Search Engine",
+      disabled: "Disabled",
     },
     tavilyKey: {
       hint: "Optional. Enables web search and web reading after configuration",
     },
     tavilyUrl: {
       hint: "Optional. Uses Tavily official API address by default",
+    },
+    firecrawlKey: {
+      hint: "Optional. Enables web search and web reading after configuration",
+    },
+    firecrawlUrl: {
+      hint: "Optional. Uses Firecrawl official API address by default",
     },
     language: {
       label: "Language",

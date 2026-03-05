@@ -5,7 +5,7 @@ import { createOpenAIGenerator } from "../lib/client";
 import { useConversationStore } from "../store/conversation";
 import { useSettingsStore } from "../store/settings";
 import { useSandpackStore } from "../store/sandpack";
-import { TAVILY_TOOLS, createTavilyToolHandler } from "../lib/tavily";
+import { SEARCH_TOOLS, createSearchToolHandler } from "../lib/search";
 import { MEMORY_TOOLS, MEMORY_TOOL_NAME, createMemoryToolHandler, buildMemoryPromptSection } from "../lib/memory";
 import { useSnapshotStore } from "../store/snapshot";
 import { mergeMessages } from "../lib/mergeMessages";
@@ -147,8 +147,8 @@ export function useGenerator({
         g._apiKey !== settings.apiKey ||
         g._apiBaseUrl !== settings.apiBaseUrl ||
         g._model !== settings.model ||
-        g._tavilyKey !== webSearchSettings.tavilyApiKey ||
-        g._tavilyUrl !== webSearchSettings.tavilyApiUrl
+        g._searchEngine !== webSearchSettings.engine ||
+        g._firecrawlKey !== webSearchSettings.firecrawlApiKey
       ) {
         generatorRef.current = null;
       }
@@ -156,7 +156,7 @@ export function useGenerator({
 
     if (!generatorRef.current) {
       const webConfigured = useSettingsStore.getState().isWebSearchConfigured();
-      const tavilyHandler = webConfigured ? createTavilyToolHandler(webSearchSettings) : undefined;
+      const searchHandler = webConfigured ? createSearchToolHandler(webSearchSettings) : undefined;
       const memoryHandler = createMemoryToolHandler();
 
       const combinedToolHandler = async (name: string, args: unknown): Promise<string> => {
@@ -175,7 +175,7 @@ export function useGenerator({
         if (name === MEMORY_TOOL_NAME) {
           return memoryHandler(name, args);
         }
-        if (tavilyHandler) return tavilyHandler(name, args);
+        if (searchHandler) return searchHandler(name, args);
         return `Error: unknown tool "${name}"`;
       };
 
@@ -336,7 +336,7 @@ export function useGenerator({
           },
         },
         files,
-        [...(webConfigured ? TAVILY_TOOLS : []), ...MEMORY_TOOLS],
+        [...(webConfigured ? SEARCH_TOOLS : []), ...MEMORY_TOOLS],
         combinedToolHandler,
       );
 
@@ -345,8 +345,8 @@ export function useGenerator({
       gen._apiKey = settings.apiKey;
       gen._apiBaseUrl = settings.apiBaseUrl;
       gen._model = settings.model;
-      gen._tavilyKey = webSearchSettings.tavilyApiKey;
-      gen._tavilyUrl = webSearchSettings.tavilyApiUrl;
+      gen._searchEngine = webSearchSettings.engine;
+      gen._firecrawlKey = webSearchSettings.firecrawlApiKey;
     }
 
     return generatorRef.current;

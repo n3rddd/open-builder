@@ -46,16 +46,6 @@ function extractLang(children: React.ReactNode): string {
   return "";
 }
 
-/** Extract plain text from React children tree for clipboard copy */
-function extractText(node: React.ReactNode): string {
-  if (typeof node === "string") return node;
-  if (typeof node === "number") return String(node);
-  if (!node) return "";
-  if (Array.isArray(node)) return node.map(extractText).join("");
-  if (isValidElement<{ children?: React.ReactNode }>(node))
-    return extractText(node.props?.children);
-  return "";
-}
 
 function CodeBlockHeader({
   lang,

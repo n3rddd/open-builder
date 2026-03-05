@@ -84,7 +84,7 @@ export async function generateWithOpenAI(
     currentFiles,
   );
 
-  const result = await generator.generate(prompt);
+  await generator.generate(prompt);
 
   // 如果有 App.tsx 文件，返回其内容作为主代码
   const mainCode = finalFiles["src/App.tsx"] || finalFiles["App.tsx"] || "";

@@ -10,8 +10,11 @@ export interface AISettings {
 }
 
 export interface WebSearchSettings {
+  engine: "tavily" | "firecrawl" | "disabled";
   tavilyApiKey: string;
   tavilyApiUrl: string;
+  firecrawlApiKey: string;
+  firecrawlApiUrl: string;
 }
 
 export type Language = "system" | "zh" | "en";
@@ -54,8 +57,11 @@ export const useSettingsStore = create<SettingsState>()(
         model: "gpt-5.3-codex",
       },
       webSearch: {
+        engine: "disabled",
         tavilyApiKey: "",
         tavilyApiUrl: "https://api.tavily.com",
+        firecrawlApiKey: "",
+        firecrawlApiUrl: "https://api.firecrawl.dev",
       },
       system: {
         language: "system" as Language,
@@ -81,12 +87,16 @@ export const useSettingsStore = create<SettingsState>()(
       },
 
       isWebSearchConfigured: () => {
-        return !!get().webSearch.tavilyApiKey;
+        const { webSearch } = get();
+        if (webSearch.engine === "disabled") return false;
+        if (webSearch.engine === "tavily") return !!webSearch.tavilyApiKey;
+        if (webSearch.engine === "firecrawl") return !!webSearch.firecrawlApiKey;
+        return false;
       },
     }),
     {
       name: "open-builder-settings",
-      version: 1,
+      version: 2,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         ai: state.ai,
@@ -101,6 +111,12 @@ export const useSettingsStore = create<SettingsState>()(
           baseUrl = baseUrl.replace(/\/chat\/completions$/, "");
           state.ai.apiBaseUrl = baseUrl.replace(/\/+$/, "");
           delete state.ai.apiUrl;
+        }
+        if (version < 2) {
+          if (!state.webSearch) state.webSearch = {};
+          state.webSearch.engine = state.webSearch.tavilyApiKey ? "tavily" : "disabled";
+          state.webSearch.firecrawlApiKey = "";
+          state.webSearch.firecrawlApiUrl = "https://api.firecrawl.dev";
         }
         return state as any;
       },

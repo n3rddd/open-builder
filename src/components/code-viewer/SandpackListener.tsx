@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSandpack, useSandpackConsole } from "@codesandbox/sandpack-react";
-import { useSandpackStore } from "../../store/sandpack";
+import { useSandpackStore, type ConsoleLogData } from "@/store/sandpack";
 
 interface SandpackListenerProps {
   onFileChange: (path: string, content: string) => void;
@@ -29,8 +29,8 @@ export function SandpackListener({ onFileChange }: SandpackListenerProps) {
   }, [code, activeFile, onFileChange]);
 
   useEffect(() => {
-    setConsoleLogs(logs);
-  }, [logs, setConsoleLogs]);
+    setConsoleLogs(logs as ConsoleLogData[]);
+  }, [logs]);
 
   return null;
 }
