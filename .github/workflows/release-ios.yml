@@ -1,10 +1,10 @@
 name: Release iOS
 
-on:
-  push:
-    tags:
-      - 'v*'
-  workflow_dispatch:
+# on:
+#   push:
+#     tags:
+#       - 'v*'
+#   workflow_dispatch:
 
 jobs:
   build-ios:
@@ -22,8 +22,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
+          node-version: "20"
+          cache: "pnpm"
 
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable

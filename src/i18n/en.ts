@@ -76,6 +76,13 @@ export const en: typeof zh = {
       hint: "Adjust the app's color scheme",
     },
     version: { label: "Version", checkUpdate: "Check for updates" },
+    reset: {
+      label: "Reset System",
+      button: "Reset & Clear All Data",
+      confirm: "Confirm Reset",
+      cancel: "Cancel",
+      warning: "This will reset all settings and delete all data (conversations, snapshots, memories). This action cannot be undone.",
+    },
   },
   empty: {
     title: "Start Creating Your App",

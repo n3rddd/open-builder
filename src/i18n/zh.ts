@@ -58,6 +58,13 @@ export const zh = {
       hint: "调整应用的配色方案",
     },
     version: { label: "当前版本", checkUpdate: "检查更新" },
+    reset: {
+      label: "重置系统",
+      button: "重置并清空数据",
+      confirm: "确认重置",
+      cancel: "取消",
+      warning: "此操作将重置所有设置并删除所有数据（会话、快照、记忆）。此操作不可撤销。",
+    },
   },
   empty: {
     title: "开始创建你的应用",

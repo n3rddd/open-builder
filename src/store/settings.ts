@@ -52,6 +52,7 @@ interface SettingsState {
   setSystem: (settings: SystemSettings) => void;
   setModelCache: (cache: ModelCache) => void;
   clearModelCache: () => void;
+  resetAll: () => void;
   isAIValid: () => boolean;
   isWebSearchConfigured: () => boolean;
   isAssetSearchConfigured: () => boolean;
@@ -99,6 +100,35 @@ export const useSettingsStore = create<SettingsState>()(
       setSystem: (settings) => set({ system: settings }),
       setModelCache: (cache) => set({ modelCache: cache }),
       clearModelCache: () => set({ modelCache: null }),
+
+      resetAll: () => {
+        set({
+          ai: {
+            apiKey: "",
+            apiBaseUrl: "https://api.openai.com/v1",
+            model: "gpt-5.3-codex",
+          },
+          webSearch: {
+            engine: "disabled",
+            tavilyApiKey: "",
+            tavilyApiUrl: "https://api.tavily.com",
+            firecrawlApiKey: "",
+            firecrawlApiUrl: "https://api.firecrawl.dev",
+          },
+          assetSearch: {
+            engine: "disabled",
+            pixabayApiKey: "",
+            pixabayApiUrl: "https://pixabay.com/api",
+            unsplashApiKey: "",
+            unsplashApiUrl: "https://api.unsplash.com",
+          },
+          system: {
+            language: "system" as Language,
+            theme: "system" as Theme,
+          },
+          modelCache: null,
+        });
+      },
 
       isAIValid: () => {
         const { ai } = get();

@@ -145,18 +145,21 @@ User Message → AI Planning → Tool Call → Execute → Return Result → AI 
 
 Built-in tools:
 
-| Tool                  | Description                                |
-| --------------------- | ------------------------------------------ |
-| `init_project`        | Initialize Sandpack project template       |
-| `manage_dependencies` | Modify package.json to manage dependencies |
-| `list_files`          | List all project files                     |
-| `read_files`          | Batch read file contents                   |
-| `write_file`          | Create or overwrite a file                 |
-| `patch_file`          | Precise search-and-replace patch           |
-| `delete_file`         | Delete a file                              |
-| `search_in_files`     | Global file content search                 |
-| `web_search`          | Web search (requires Tavily)               |
-| `web_reader`          | Read web page content                      |
+| Tool                     | Description                                |
+| ------------------------ | ------------------------------------------ |
+| `init_project`           | Initialize Sandpack project template       |
+| `manage_dependencies`    | Modify package.json to manage dependencies |
+| `list_files`             | List all project files                     |
+| `read_files`             | Batch read file contents                   |
+| `write_file`             | Create or overwrite a file                 |
+| `patch_file`             | Precise search-and-replace patch           |
+| `delete_file`            | Delete a file                              |
+| `search_in_files`        | Global file content search                 |
+| `web_search`             | Web search (supports Tavily, Firecrawl)    |
+| `web_reader`             | Read web page content                      |
+| `image_search`           | Image search (supports Pixabay, Unsplash)  |
+| `search_npm_packages`    | NPM package search                         |
+| `get_npm_package_detail` | Get detailed information about NPM package |
 
 ### Tech Stack
 

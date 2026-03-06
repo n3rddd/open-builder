@@ -145,18 +145,21 @@ pnpm tauri:android:build
 
 内置工具列表：
 
-| 工具                  | 描述                               |
-| --------------------- | ---------------------------------- |
-| `init_project`        | 初始化 Sandpack 项目模板           |
-| `manage_dependencies` | 修改 package.json 管理依赖         |
-| `list_files`          | 列出所有项目文件                   |
-| `read_files`          | 批量读取文件内容                   |
-| `write_file`          | 创建或覆写文件                     |
-| `patch_file`          | 精确搜索替换补丁（推荐用于小改动） |
-| `delete_file`         | 删除文件                           |
-| `search_in_files`     | 全局搜索文件内容                   |
-| `web_search`          | 联网搜索（需配置 Tavily）          |
-| `web_reader`          | 读取网页内容                       |
+| 工具                     | 描述                               |
+| ------------------------ | ---------------------------------- |
+| `init_project`           | 初始化 Sandpack 项目模板           |
+| `manage_dependencies`    | 修改 package.json 管理依赖         |
+| `list_files`             | 列出所有项目文件                   |
+| `read_files`             | 批量读取文件内容                   |
+| `write_file`             | 创建或覆写文件                     |
+| `patch_file`             | 精确搜索替换补丁（推荐用于小改动） |
+| `delete_file`            | 删除文件                           |
+| `search_in_files`        | 全局搜索文件内容                   |
+| `web_search`             | 联网搜索（支持 Tavily、Firecrawl） |
+| `web_reader`             | 读取网页内容                       |
+| `image_search`           | 图片搜索（支持 Pixabay、Unsplash） |
+| `search_npm_packages`    | NPM 包搜索                         |
+| `get_npm_package_detail` | 获取 NPM 包的详细信息              |
 
 ### 技术栈
 

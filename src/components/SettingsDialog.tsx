@@ -8,6 +8,7 @@ import {
   Sun,
   Info,
   RefreshCw,
+  Trash2,
 } from "lucide-react";
 import {
   AISettings,
@@ -18,6 +19,10 @@ import {
   Theme,
   useSettingsStore,
 } from "../store/settings";
+import { useConversationStore } from "../store/conversation";
+import { useSnapshotStore } from "../store/snapshot";
+import { useMemoryStore } from "../store/memory";
+import localforage from "localforage";
 import {
   Dialog,
   DialogContent,
@@ -619,6 +624,18 @@ function SystemTab({
   setForm: (v: SystemSettings) => void;
 }) {
   const t = useT();
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const handleReset = async () => {
+    useSettingsStore.getState().resetAll();
+    useConversationStore.persist.clearStorage();
+    useSnapshotStore.persist.clearStorage();
+    useMemoryStore.persist.clearStorage();
+    await localforage.clear();
+
+    window.location.reload();
+  };
+
   return (
     <>
       {/* 语言 */}
@@ -657,6 +674,45 @@ function SystemTab({
           ]}
         />
         <p className="text-xs text-muted-foreground">{t.settings.theme.hint}</p>
+      </div>
+
+      {/* 重置系统 */}
+      <div className="space-y-2">
+        <Label>
+          <Trash2 size={16} className="inline mr-1" />
+          {t.settings.reset.label}
+        </Label>
+        {!showConfirm ? (
+          <Button
+            variant="destructive"
+            className="w-full"
+            onClick={() => setShowConfirm(true)}
+          >
+            {t.settings.reset.button}
+          </Button>
+        ) : (
+          <>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => setShowConfirm(false)}
+              >
+                {t.settings.reset.cancel}
+              </Button>
+              <Button
+                variant="destructive"
+                className="flex-1"
+                onClick={handleReset}
+              >
+                {t.settings.reset.confirm}
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {t.settings.reset.warning}
+            </p>
+          </>
+        )}
       </div>
 
       {/* 版本 */}
