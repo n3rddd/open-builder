@@ -50,6 +50,8 @@ It also supports building as a desktop app (macOS / Windows / Linux) and mobile 
 - **Dependency Management** — AI can modify `package.json` and trigger dependency reinstallation
 - **Project Snapshots** — Roll back code to any previous version with one click
 - **Context Compression** — Automatically compresses long conversation context to reduce token usage
+- **Built-in Search** — Supports enabling the model's built-in search service
+- **CORS Resolution** — App Client-side (Tauri) API reverse proxy forwarding effectively resolves CORS issues
 
 ### User Experience
 

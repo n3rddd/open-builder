@@ -6,6 +6,24 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and
 
 ---
 
+## [1.3.0] - 2026-03-14
+
+### Added
+
+- Built-in search services support within models
+- Client-side API reverse proxy forwarding to resolve CORS issues
+
+### Refactored
+
+- Integrated AI SDK to unify API output and ensure compatibility with mainstream LLM APIs
+- Rewrote Tool Call definitions using Zod for better type safety
+
+### Fixed
+
+- Fixed an issue where the thinking process block was unexpectedly split into multiple blocks by tool calls
+
+---
+
 ## [1.2.0] - 2026-03-05
 
 ### Added
@@ -88,6 +106,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and
 - OpenAI-compatible API support (OpenAI, DeepSeek, etc.)
 - Basic file operation tools: `write_file`, `read_files`, `list_files`, `delete_file`
 
+[1.3.0]: https://github.com/Amery2010/open-builder/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/Amery2010/open-builder/compare/v1.0.0...v1.2.0
 [1.0.0]: https://github.com/Amery2010/open-builder/compare/v0.3.0...v1.0.0
 [0.1.0]: https://github.com/Amery2010/open-builder/releases/tag/v0.1.0
